@@ -27,6 +27,7 @@ public class PlayerController :MonoBehaviour {
     }
     private PlayerState playerState;
 
+    public event System.Action OnPlayerDamage;
     private void Awake()
     {
         Instance = this;
@@ -122,6 +123,7 @@ public class PlayerController :MonoBehaviour {
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        OnPlayerDamage?.Invoke();
         if (currentHealth <= 0)
         {
             GameManager.Instance.GameOver(GameManager.GameOverType.Died);
@@ -157,5 +159,9 @@ public class PlayerController :MonoBehaviour {
             GameManager.Instance.CollectCoin(coin.GetCoinValue());
             coin.DestroyCoin();
         }
+    }
+    public float GetHealthNormalized()
+    {
+        return (float)currentHealth / 100;
     }
 }
